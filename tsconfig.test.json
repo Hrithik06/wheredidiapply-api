@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "rootDir": ".", //Overriding rootDir of tsconfig.app.json which points to ./src but we want to point to . or ./test
+    "types": ["vitest/globals"],
+  },
+  "include": ["test/**/*.test.ts"],
+}
