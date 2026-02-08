@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client"
+  // Moving the client into src makes it visible to your build tools (Vite/TS/etc.)
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  // We leave the URL out; it's injected via the config and adapter
+}
+
+/**
+ * This is NOT an auth table.
+ * This is an ownership table.
+ * It answers:
+ * "who owns the job applications?"
+ */
+
+model User {
+  id       String @id @default(cuid())
+  googleId String @unique
+
+  // Contact info
+  email   String  @unique
+  name    String?
+  picture String?
+
+  // OAuth data
+  scopes         String[]
+  accessToken    String?   @db.Text // Can be long
+  refreshToken   String?   @db.Text // Can be long
+  tokenExpiresAt DateTime?
+
+  // Feature flags (embedded, not separate table!)
+  manualTracking    Boolean @default(true) // Always enabled
+  automaticTracking Boolean @default(false) // Enabled when Gmail scope granted
+
+  // Relations
+  applications Application[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Indexes for performance
+  @@index([email])
+  @@index([googleId])
+}
+
+model Application {
+  id String @id @default(cuid())
+
+  // Foreign key
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Job details
+  company     String
+  role        String
+  status      ApplicationStatus @default(APPLIED)
+  appliedDate DateTime          @default(now())
+
+  // Tracking source
+  source ApplicationSource @default(MANUAL)
+
+  // Gmail-specific data (only for automatic tracking)
+  emailThreadId String? // Gmail thread ID
+  emailSubject  String?
+
+  // Additional fields
+  notes String? @db.Text
+  url   String? // Job posting URL
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Indexes
+  @@index([userId])
+  @@index([status])
+  @@index([source])
+  @@index([emailThreadId])
+}
+
+enum ApplicationStatus {
+  APPLIED
+  INTERVIEWING
+  OFFER
+  REJECTED
+  ACCEPTED
+  WITHDRAWN
+}
+
+enum ApplicationSource {
+  MANUAL
+  GMAIL_AUTO
+}
