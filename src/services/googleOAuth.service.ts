@@ -1,7 +1,8 @@
 import { google } from "googleapis";
-import { oauth2Client } from "../config/googleOAuth.js";
+import { getOAuthClient } from "../config/googleOAuth.js";
 
 export async function exchangeCodeForTokens(code: string) {
+  const oauth2Client = getOAuthClient();
   const { tokens } = await oauth2Client.getToken(code);
   return tokens;
 }
@@ -11,6 +12,7 @@ export async function getGrantedScopes(tokens: any): Promise<string[]> {
 }
 
 export async function fetchGmailMessages(refreshToken: string) {
+  const oauth2Client = getOAuthClient();
   oauth2Client.setCredentials({ refresh_token: refreshToken });
 
   const gmail = google.gmail({ version: "v1", auth: oauth2Client });
@@ -19,6 +21,5 @@ export async function fetchGmailMessages(refreshToken: string) {
     userId: "me",
     maxResults: 10,
   });
-
   return response.data.messages;
 }
