@@ -10,6 +10,7 @@ import {
   updateScopes,
 } from "../services/user.service.js";
 import { hasFullGmailTokens } from "../utils/hasFullGmailTokens.js";
+import { firstMailSync } from "./applications.controller.js";
 
 const BASE_SCOPES = [
   "https://www.googleapis.com/auth/userinfo.profile",

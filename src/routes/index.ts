@@ -3,10 +3,13 @@ import authRoutes from "./auth.routes.js";
 import healthRoutes from "./health.routes.js";
 import userRoutes from "./user.routes.js";
 
+import applicationsRoutes from "./applications.route.js";
+
 const router = Router();
 
 router.use("/auth", authRoutes);
 router.use("/health", healthRoutes);
 router.use("/users", userRoutes);
+router.use("/applications", applicationsRoutes);
 
 export default router;
