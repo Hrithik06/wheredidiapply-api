@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { getOAuthClient } from "../config/googleOAuth.js";
-import { google } from "googleapis";
 import { checkScopes } from "../utils/checkScopes.js";
 import {
   enableAutomaticTracking,
@@ -10,7 +9,6 @@ import {
   updateScopes,
 } from "../services/user.service.js";
 import { hasFullGmailTokens } from "../utils/hasFullGmailTokens.js";
-import { firstMailSync } from "./applications.controller.js";
 
 const BASE_SCOPES = [
   "https://www.googleapis.com/auth/userinfo.profile",
@@ -56,12 +54,27 @@ export const googleCallback = async (req: Request, res: Response) => {
     //   // // missing: missingScopes, });
     // }
 
-    const oauth2 = google.oauth2({
-      auth: oauth2Client,
-      version: "v2",
-    });
+    // const oauth2 = google.oauth2({
+    //   auth: oauth2Client,
+    //   version: "v2",
+    // });
 
-    const { data } = await oauth2.userinfo.get();
+    // const { data } = await oauth2.userinfo.get();
+
+    // const accessToken = (await oauth2Client.getAccessToken()).token;
+    // console.log(accessToken)
+    // console.log(tokens.access_token === accessToken)
+
+    const response = await fetch(
+      "https://www.googleapis.com/oauth2/v2/userinfo",
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.access_token}`,
+        },
+      }
+    );
+
+    const data = await response.json();
 
     if (!data.id || !data.email || !data.name || !data.picture) {
       throw new Error("Missing data in OAuth callback");
@@ -124,12 +137,30 @@ export const googleUpgradeCallback = async (req: Request, res: Response) => {
     });
 
     oauth2Client.setCredentials(tokens);
-    const oauth2 = google.oauth2({
-      auth: oauth2Client,
-      version: "v2",
-    });
 
-    const { data } = await oauth2.userinfo.get();
+
+    // const oauth2 = google.oauth2({
+    //   auth: oauth2Client,
+    //   version: "v2",
+    // });
+
+    // const { data } = await oauth2.userinfo.get();
+
+    // const accessToken = (await oauth2Client.getAccessToken()).token;
+    // console.log(accessToken)
+    // console.log(tokens.access_token === accessToken)
+
+    const response = await fetch(
+      "https://www.googleapis.com/oauth2/v2/userinfo",
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.access_token}`,
+        },
+      }
+    );
+
+    const data = await response.json();
+
     const googleId = data.id;
 
     if (!tokens.scope) {

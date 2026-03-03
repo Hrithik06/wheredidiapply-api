@@ -1,5 +1,6 @@
-import { google } from "googleapis";
+// import { google } from "googleapis";
 import { getOAuthClient } from "../config/googleOAuth.js";
+import { gmail } from "@googleapis/gmail";
 import {
   decodeToPlainText,
   extractBodyPart,
@@ -54,7 +55,8 @@ export async function fetchEmails(refreshToken: string, accessToken: string) {
       // Optional: expiry_date: 123456789 (timestamp in ms)
     });
 
-    const gmailAPI = google.gmail({ version: "v1", auth: oauth2Client });
+    // const gmailAPI = google.gmail({ version: "v1", auth: oauth2Client });
+    const gmailAPI = gmail({ version: "v1", auth: oauth2Client });
 
     //"??" guard against if messageIds is null/empty (empty inbox)
     const messageIds = await listMessageIds(gmailAPI).then(
