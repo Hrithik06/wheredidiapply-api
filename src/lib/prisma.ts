@@ -28,7 +28,7 @@ const globalForPrisma = globalThis as unknown as {
 // Use the POOLED connection for the application runtime (DATABASE_URL:pooled connection string Supabase)
 
 const pool = new pg.Pool({
-  connectionString: process.env.DATABASE_URL!,
+  connectionString: process.env.DATABASE_URL,
 
   // CRITICAL for Supabase
   // Prevents exhausting connection limits

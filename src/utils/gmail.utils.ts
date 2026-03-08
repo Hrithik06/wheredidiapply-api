@@ -1,7 +1,8 @@
 import { Base64 } from "js-base64";
 import { convert } from "html-to-text";
+import { ExtractedBodyPart, GmailMessagePart, MessageWithParts } from "../types/gmail.js";
 
-export function extractParts(part, flatParts = []) {
+export function extractParts(part: GmailMessagePart, flatParts: GmailMessagePart[] = []) {
   //extract all nested parts by flatteniing the parts[]
   // "?" Guard against will crash if mimeType is undefined
   if (part.mimeType?.startsWith("multipart/")) {
@@ -16,10 +17,11 @@ export function extractParts(part, flatParts = []) {
   return flatParts;
 }
 
-export function extractBodyPart(messageWithParts) {
+
+export function extractBodyPart(messageWithParts: MessageWithParts) {
   // 1. Filter for text/plain
   // 2. Ensure filename is empty/null to exclude attachments cuz if there is a .txt attachment it also comes has text/plain mimeType and has value for filename
-  let bodyPart = messageWithParts.parts.find(
+  let bodyPart = messageWithParts.parts?.find(
     (part) =>
       part.mimeType === "text/plain" &&
       (!part.filename || part.filename.length === 0),
@@ -27,7 +29,7 @@ export function extractBodyPart(messageWithParts) {
 
   // 3. Fallback: If no plain text, find the HTML Body
   if (!bodyPart) {
-    bodyPart = messageWithParts.parts.find(
+    bodyPart = messageWithParts?.parts?.find(
       (part) => part.mimeType === "text/html" && !part.filename,
     );
   }
@@ -35,12 +37,12 @@ export function extractBodyPart(messageWithParts) {
     id: messageWithParts.id,
     // If found, return the encoded data; otherwise null
     // plainPart: bodyPart ? bodyPart : null,
-    rawBody: bodyPart ? bodyPart.body.data : null,
+    rawBody: bodyPart?.body?.data ?? null,
     mimeType: bodyPart ? bodyPart.mimeType : null,
   };
 }
 
-export function decodeToPlainText(emailBody) {
+export function decodeToPlainText(emailBody: ExtractedBodyPart) {
   if (!emailBody.rawBody || !Base64.isValid(emailBody.rawBody)) {
     return null;
   }

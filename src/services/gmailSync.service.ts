@@ -1,4 +1,4 @@
-// import { google } from "googleapis";
+
 import { getOAuthClient } from "../config/googleOAuth.js";
 import { gmail } from "@googleapis/gmail";
 import {
@@ -6,11 +6,18 @@ import {
   extractBodyPart,
   extractParts,
 } from "../utils/gmail.utils.js";
+import { GmailClient } from "../types/gmail.js";
+import { gmailQuery } from "../constants/gmailFilters.js";
+
 export async function exchangeCodeForTokens(code: string) {
   const oauth2Client = getOAuthClient();
   const { tokens } = await oauth2Client.getToken(code);
   return tokens;
 }
+// TODO 1. Filter listMessageIds using gmail filters
+// TODO 2. Metadata fetchEmails
+// TODO 3. fetchEmails LLM
+
 
 // Use the actual type from googleapis
 // import type { Credentials } from "google-auth-library";
@@ -18,30 +25,31 @@ export async function exchangeCodeForTokens(code: string) {
 //   return tokens.scope?.split(" ") ?? [];
 // }
 
-export async function listMessageIds(gmailAPI, maxResults = 10) {
+export async function listMessageIds(gmailAPI: GmailClient, maxResults = 10) {
   try {
     //get first 10 message ids
     const messageListResponse = await gmailAPI.users.messages.list({
       userId: "me",
       maxResults: maxResults,
+      q: gmailQuery.replace(/[\r\n]+/gm, "")
     });
 
     return messageListResponse;
   } catch (error) {
-    console.error("listMessageIds Error:", error.message);
+    console.error("listMessageIds Error: ", error.message);
     throw new Error(`listMessageIds failed: ${error.message}`);
   }
 }
-export async function fetchMessageById(id, gmailAPI) {
+export async function fetchMessageById(id: string, gmailAPI: GmailClient, format: string) {
   try {
     const messageResponse = await gmailAPI.users.messages.get({
       id: id,
       userId: "me",
-      format: "full",
+      format: format,
     });
     return messageResponse;
   } catch (error) {
-    console.error("fetchMessageById Error:", error.message);
+    console.error("fetchMessageById Error: ", error.message);
     throw new Error(`fetchMessageById failed: ${error.message}`);
   }
 }
@@ -69,7 +77,7 @@ export async function fetchEmails(refreshToken: string, accessToken: string) {
 
     //Use allSettled to fetch what you can, skip what fails
     const results = await Promise.allSettled(
-      messageIds.map((msgRef) => fetchMessageById(msgRef.id, gmailAPI)),
+      messageIds.map((msgRef) => fetchMessageById(msgRef.id, gmailAPI, "full")),
     );
     const rawMessages = results
       .filter((result) => result.status === "fulfilled")
@@ -81,7 +89,7 @@ export async function fetchEmails(refreshToken: string, accessToken: string) {
 
     //fetch only body part text/plain fallback text/html ignore attachments
     const extractedBodies = flattenedMessages.map((msg) =>
-      extractBodyPart(msg),
+      extractBodyPart(msg)
     );
     // const decodedData = extractedBodies.map((emailBody) => {
     //   return {
@@ -103,7 +111,7 @@ export async function fetchEmails(refreshToken: string, accessToken: string) {
     // only job-related, successfully decoded emails reach here → save to DB
     return decodedEmails;
   } catch (error) {
-    console.error("fetchEmails Error:", error.message);
+    console.error("fetchEmails Error: ", error.message);
     throw new Error(`fetchEmails failed: ${error.message}`);
   }
 }
