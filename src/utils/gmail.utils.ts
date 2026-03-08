@@ -1,6 +1,18 @@
 import { Base64 } from "js-base64";
 import { convert } from "html-to-text";
-import { ExtractedBodyPart, GmailMessagePart, MessageWithParts } from "../types/gmail.js";
+import { ExtractedBodyPart, GmailMessageHeaders, GmailMessagePart, MessageWithParts } from "../types/gmail.js";
+
+
+export function extractHeaders(headers: GmailMessageHeaders[]) {
+  const headersReqd = ["Subject", "From", "Reply-To"]
+  const headerObj = {
+    subject: headers.find(h => h.name === "Subject")?.value,
+    from: headers?.find(h => h.name === "From")?.value,
+    replyTo: headers?.find(h => h.name === "Reply-To")?.value
+  }
+  return headerObj
+
+}
 
 export function extractParts(part: GmailMessagePart, flatParts: GmailMessagePart[] = []) {
   //extract all nested parts by flatteniing the parts[]

@@ -4,6 +4,7 @@ import { gmail } from "@googleapis/gmail";
 import {
   decodeToPlainText,
   extractBodyPart,
+  extractHeaders,
   extractParts,
 } from "../utils/gmail.utils.js";
 import { GmailClient } from "../types/gmail.js";
@@ -79,12 +80,20 @@ export async function fetchEmails(refreshToken: string, accessToken: string) {
     const results = await Promise.allSettled(
       messageIds.map((msgRef) => fetchMessageById(msgRef.id, gmailAPI, "full")),
     );
+    // return results
+
     const rawMessages = results
       .filter((result) => result.status === "fulfilled")
       .map((result) => result.value);
     //Flatten payload and parts array
+
+
     const flattenedMessages = rawMessages.map((msg) => {
-      return { id: msg.data.id, parts: extractParts(msg.data.payload) };
+      return {
+        id: msg.data.id,
+        headers: extractHeaders(msg.data.payload.headers),
+        parts: extractParts(msg.data.payload)
+      };
     });
 
     //fetch only body part text/plain fallback text/html ignore attachments
@@ -98,7 +107,7 @@ export async function fetchEmails(refreshToken: string, accessToken: string) {
     //     mimeType: emailBody.mimeType,
     //   };
     // });
-
+    return extractedBodies
 
     const decodedEmails = extractedBodies
       .map((emailBody) => ({
@@ -109,7 +118,7 @@ export async function fetchEmails(refreshToken: string, accessToken: string) {
     // .filter((email) => hasJobKeywords(email.bodyText)); // drop non-job emails
 
     // only job-related, successfully decoded emails reach here → save to DB
-    return decodedEmails;
+    // return decodedEmails;
   } catch (error) {
     console.error("fetchEmails Error: ", error.message);
     throw new Error(`fetchEmails failed: ${error.message}`);

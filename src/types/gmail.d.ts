@@ -6,9 +6,15 @@ export type GmailMessagePart = gmail_v1.Schema$MessagePart;
 export type GmailMessagePartBody = gmail_v1.Schema$MessagePartBody;
 export type GmailMessagePartHeader = gmail_v1.Schema$MessagePartHeader;
 export type GmailMessageList = gmail_v1.Schema$ListMessagesResponse;
+export type GmailMessageHeaders = gmail_v1.Schema$MessagePartHeader;
 
 export type MessageWithParts = {
     id: string
+    headers: {
+        subject: string
+        from: string
+        replyTo: string
+    }
     parts: GmailMessagePart[]
 }
 
