@@ -29,6 +29,7 @@
     "cors": "^2.8.6",
     "dotenv": "^17.2.4",
     "express": "^5.2.1",
+    "gaxios": "^7.1.4",
     "google-auth-library": "^10.6.1",
     "html-to-text": "^9.0.5",
     "js-base64": "^3.7.8",

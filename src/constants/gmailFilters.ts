@@ -1,3 +1,4 @@
+import { getFormattedDate } from "../utils/helper.js"
 
 export const JOB_PLATFORM_SENDERS = [
     "linkedin.com",
@@ -138,6 +139,7 @@ export const stageKeywords = {
     rejected: REJECTION_KEYWORDS,
     offer: OFFER_KEYWORDS
 }
+
 export const gmailQuery = `
 category:primary newer_than:30d (
   from:linkedin.com OR
@@ -150,11 +152,67 @@ category:primary newer_than:30d (
   from:smartrecruiters.com OR
   from:jobvite.com OR
   from:icims.com OR
+  from:no-reply@ OR
+  from:noreply@ OR
   from:careers@ OR
   from:jobs@ OR
   from:recruiting@ OR
   from:talent@ OR
-  from:hire@
+  from:hire@ OR
+  subject:(interview OR application OR applied OR assessment OR recruiter OR submitting OR "next steps" OR "coding challenge")
 )
-OR subject:(interview OR application OR applied OR assessment OR recruiter OR applying)
+`;
+
+export const gmailQuery_v2 = `
+(category:{primary updates})
+newer_than:30d
+
+from:{linkedin.com indeed.com naukri.com greenhouse.io lever.co ashbyhq.com workday.com smartrecruiters.com jobvite.com icims.com workablemail.com}
+
+OR from:{no-reply@ noreply@ recruiting@ recruiter@ talent@ careers@ jobs@ hiring@}
+
+(subject:{interview application applied opportunity recruiter position role assessment})
+
+OR "thank you for applying"
+OR "we received your application"
+OR "schedule an interview"
 `
+
+export const gmailQuery_v3 = `(category:{primary updates})
+newer_than:30d
+
+(
+  from:{linkedin.com indeed.com naukri.com}
+  OR
+  from:{recruiting@ recruiter@ careers@ jobs@ hiring@ talent@}
+  OR
+  greenhouse.io
+  OR
+  lever.co
+  OR
+  ashbyhq.com
+  OR
+  smartrecruiters.com
+  OR
+  jobvite.com
+  OR
+  icims.com
+  OR
+  myworkdayjobs.com
+  OR
+  workablemail.com
+)
+
+(
+  subject:{interview application applied assessment recruiter role position}
+  OR
+  "thank you for applying"
+  OR
+  "application received"
+  OR
+  "next steps"
+  OR
+  "schedule an interview"
+)`
+
+//q: gmailQuery.replace(/\s+/g, " ").trim()

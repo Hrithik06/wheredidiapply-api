@@ -4,7 +4,7 @@ import { getUser } from "../services/user.service.js";
 // import { Base64 } from "js-base64";
 export async function scanGmailForApplications(req: Request, res: Response) {
   // TODO: get googleId from req
-  const googleId = "107116420132667803041";
+  const googleId = process.env.GOOGLE_ID;
   if (!googleId) {
     res.status(400).send("Invalid Google Id")
     return
