@@ -15,38 +15,36 @@ function normalizeBaseMessage(msg: GmailMessage) {
   };
 }
 
-export function normalizeMetadataMessage(
-  msg: GmailMessage
-): NormalizedMetadataMessage {
-  const base = normalizeBaseMessage(msg);
+export function normalizeMessage(
+  msg: GmailMessage,
+  format: "metadata" | "full"
+) {
+  const base = {
+    id: msg.id,
+    threadId: msg.threadId,
+    headers: extractHeaders(msg.payload?.headers ?? []),
+    snippet: msg.snippet,
+    historyId: msg.historyId
+  }
 
-  // Ensure headers conform to Record<string, string>
-  const headers: Record<string, string> = Object.fromEntries(
-    Object.entries(base.headers ?? {}).map(([k, v]) => [k, v ?? ''])
-  );
+  if (format === "full") {
+    return {
+      ...base,
+      parts: extractParts(msg.payload ?? {}),
+    }
+  }
 
-  return {
-    ...base,
-    headers,
-  };
+  return base
 }
+export const normalizeMetadataMessage = (msg: GmailMessage) =>
+  normalizeMessage(msg, "metadata")
 
-export function normalizeFullMessage(
-  msg: GmailMessage
-): NormalizedFullMessage {
-  const base = normalizeBaseMessage(msg);
+export const normalizeFullMessage = (msg: GmailMessage) =>
+  normalizeMessage(msg, "full")
 
-  // Ensure headers conform to Record<string, string>
-  const headers: Record<string, string> = Object.fromEntries(
-    Object.entries(base.headers ?? {}).map(([k, v]) => [k, v ?? ''])
-  );
 
-  return {
-    ...base,
-    headers,
-    parts: msg.payload?.parts ?? [],
-  };
-}
+
+
 
 export function extractHeaders(headers: GmailMessagePartHeader[]) {
   // const headersReqd = ["Subject", "From", "Reply-To"]
