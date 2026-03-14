@@ -42,10 +42,6 @@ export const normalizeMetadataMessage = (msg: GmailMessage) =>
 export const normalizeFullMessage = (msg: GmailMessage) =>
   normalizeMessage(msg, "full")
 
-
-
-
-
 export function extractHeaders(headers: GmailMessagePartHeader[]) {
   // const headersReqd = ["Subject", "From", "Reply-To"]
   const headerObj = {
@@ -165,3 +161,29 @@ export function decodeEmail(msg: MessageWithBody | null): DecodedEmail | null {
 // appliedDate
 // emailSubject
 // emailThreadId
+
+export function classifyOnSubject() { }
+export function classifyOnSnippet() { }
+export function classifyOnBody() { }
+//Ignore Job invites from naukri // in query only see negative query can be made
+export function extractCompanyNameFromAddress() {
+  //TODO: Extract name using From Address Everything before < tag is most of the time name but there are cases
+  //"\"Codestore Technologies Pvt Ltd.\" <info@codestoresolutions.com>"
+  //"Smart Working Solutions <no-reply@hire.lever.co>"
+  // Ignore if via is there "from": "Rohini B via Wellfound <no-reply@remail.wellfound.com>",
+  // Ignore Alerts  "from": "Naukri Alerts <naukrialerts@naukri.com>",
+  //    "from": "Indeed <alert@indeed.com>",
+  // Ignore Match    "from": "Indeed <donotreply@match.indeed.com>"
+}
+
+export function extractCompanyNameFromSubject() {
+  //    "subject": "Your application to Svaksha Technologies was accepted!",
+  //"subject": "Your application to Web Developer at OptimHire",
+  //"from": "LinkedIn <jobs-noreply@linkedin.com>",
+  // "subject": "Hrithik, your application was sent to Binated",
+  //  "from": "LinkedIn <jobs-noreply@linkedin.com>",
+}
+
+export function extractCompanyNameFromSnippet() {
+  //    "snippet": "Your application was sent to Binated ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏",
+}
