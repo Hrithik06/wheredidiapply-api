@@ -9,7 +9,7 @@ const router = Router();
 
 router.use("/auth", authRoutes);
 router.use("/health", healthRoutes);
-router.use("/users", userRoutes);
+router.use("/user", userRoutes);
 router.use("/jobs", jobRoutes);
 
 export default router;
