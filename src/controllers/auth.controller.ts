@@ -129,7 +129,7 @@ export const googleCallback = async (req: Request, res: Response) => {
     res.cookie("session", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // true in production (HTTPS)
-      // sameSite: "lax",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 7 * ONE_DAY,
     });
 

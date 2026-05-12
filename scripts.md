@@ -1,8 +1,9 @@
+```js
 "scripts": {
   "dev": "tsx watch src/index.ts",
 
-  "build": "tsc",
-  "start": "node dist/index.js",
+  "build": "prisma generate && tsc -p tsconfig.app.json",
+  "start": "prisma migrate deploy && node dist/index.js",
 
   "test": "vitest",
 
@@ -24,3 +25,4 @@
   // reset DB + rerun migrations + seed
   "db:reset": "prisma migrate reset"
 }
+```
