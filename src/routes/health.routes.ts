@@ -7,6 +7,7 @@ router.get("/", (_req, res) => {
     status: "ok",
     uptime: process.uptime(),
     timestamp: new Date().toISOString(),
+    clientUrl: process.env.CLIENT_URL,
   });
 });
 
