@@ -7,7 +7,7 @@ import {
 } from "../services/jobs.service.js";
 import { prisma } from "../lib/prisma.js";
 import { FilterJobQuery } from "../validators/job.validator.js";
-import { JobStatus } from "../types/jobs.js";
+import { JobStatus, JobSource } from "../types/jobs.js";
 import { AuthRequest } from "../types/request.js";
 type Params = {
   id: string;
@@ -20,7 +20,7 @@ export const addJob = async (req: AuthRequest, res: Response) => {
   const job = {
     ...input, // validated by Zod
     status: input.status ?? JobStatus.APPLIED, // apply defaults for missing fields
-    appliedDate: input.appliedDate ?? new Date(), // apply defaults for missing fields
+    appliedDate: new Date(input.appliedDate) ?? new Date(), // apply defaults for missing fields
     userId, // injected by server
   };
   const jobDB = await createJob(job);
@@ -72,24 +72,24 @@ export const seedJobsForUser = async (req: AuthRequest, res: Response) => {
       userId,
       company: "Google",
       title: "Frontend Engineer",
-      status: "APPLIED",
-      source: "MANUAL",
+      status: JobStatus.APPLIED,
+      source: JobSource.MANUAL,
       notes: "Applied via careers page",
     },
     {
       userId,
       company: "Microsoft",
       title: "Software Engineer",
-      status: "REJECTED",
-      source: "MANUAL",
+      status: JobStatus.REJECTED,
+      source: JobSource.MANUAL,
       notes: "Rejected after OA",
     },
     {
       userId,
       company: "Amazon",
       title: "SDE I",
-      status: "INTERVIEW_SCHEDULED",
-      source: "GMAIL_AUTO",
+      status: JobStatus.INTERVIEW_SCHEDULED,
+      source: JobSource.GMAIL_AUTO,
       emailMessageId: `msg-${userId}-demo`,
       emailThreadId: `thread-${userId}-demo`,
       emailSubject: "Your application at Amazon",

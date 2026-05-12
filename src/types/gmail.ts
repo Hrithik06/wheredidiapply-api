@@ -31,7 +31,7 @@ export type MessageWithBody = BaseNormalizedMessage & {
     bodyPart: ExtractedBodyPart | null
 }
 
-type DecodedEmail = BaseNormalizedMessage & {
+export type DecodedEmail = BaseNormalizedMessage & {
 
     bodyText: string
 }

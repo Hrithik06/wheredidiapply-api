@@ -1,12 +1,12 @@
 {
-  "name": "wheredidiapply-api",
+  "name": "neathunt-api",
   "version": "1.0.0",
   "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "prisma generate && tsc",
+    "build": "prisma generate && tsc -p tsconfig.app.json",
     "start": "prisma migrate deploy && node dist/index.js",
     "test": "vitest",
     "db:migrate": "prisma migrate dev",
@@ -19,7 +19,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.28.1",
+  "packageManager": "pnpm@11.1.0",
   "dependencies": {
     "@googleapis/gmail": "^16.1.1",
     "@prisma/adapter-pg": "^7.8.0",
@@ -32,12 +32,12 @@
     "express": "^5.2.1",
     "gaxios": "^7.1.4",
     "google-auth-library": "^10.6.2",
-    "html-to-text": "^9.0.5",
+    "html-to-text": "^10.0.0",
     "js-base64": "^3.7.8",
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.10.1",
     "pg": "^8.20.0",
-    "zod": "^4.3.6"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.10",
@@ -45,13 +45,13 @@
     "@types/express": "^5.0.6",
     "@types/express-serve-static-core": "^5.1.1",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^24.12.2",
+    "@types/node": "^25.7.0",
     "@types/pg": "^8.20.0",
-    "@types/supertest": "^6.0.3",
+    "@types/supertest": "^7.2.0",
     "prisma": "^7.8.0",
     "supertest": "^7.2.2",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3",
-    "vitest": "^4.1.5"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.6"
   }
 }

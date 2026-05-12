@@ -13,6 +13,8 @@ export default defineConfig({
   datasource: {
     // VERY IMPORTANT:
     // CLI commands (migrate, pull, push) MUST use the un-pooled direct connection
-    url: env("DIRECT_URL"),
+    url: env(
+      process.env.NODE_ENV === "production" ? "DATABASE_URL" : "DIRECT_URL",
+    ),
   },
 });
