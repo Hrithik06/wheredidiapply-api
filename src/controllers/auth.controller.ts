@@ -101,7 +101,7 @@ export const googleCallback = async (req: Request, res: Response) => {
     if (!data.id || !data.email || !data.name || !data.picture) {
       throw new Error("Missing data in OAuth callback");
     }
-
+    console.log("google data: ", data);
     // Normalize Google profile data for app
     const profile = {
       googleId: data.id,
@@ -109,6 +109,8 @@ export const googleCallback = async (req: Request, res: Response) => {
       name: data.name,
       picture: data.picture,
       scopes: grantedScopes,
+      givenName: data.given_name,
+      familyName: data.family_name,
     };
 
     // Create user if first login

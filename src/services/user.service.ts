@@ -13,6 +13,8 @@ export async function findOrCreateUser(profile: CreateUserInput) {
       email: profile.email,
       name: profile.name,
       picture: profile.picture,
+      givenName: profile.givenName,
+      familyName: profile.familyName,
       // scopes handled separately via updateScopes
     },
     create: profile, //create a new user with all profile obj
@@ -84,6 +86,8 @@ export async function getSafeUserById(userId: string) {
       email: true,
       timezone: true,
       timezoneInitialized: true,
+      name: true,
+      givenName: true,
     },
   });
 }

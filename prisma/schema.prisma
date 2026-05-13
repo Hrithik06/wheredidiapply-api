@@ -21,9 +21,11 @@ model User {
   googleId String @unique
 
   // Contact info
-  email   String  @unique
-  name    String?
-  picture String?
+  email      String  @unique
+  name       String?
+  givenName  String?
+  familyName String?
+  picture    String?
 
   //User settings
   //TimeZone from client
@@ -39,6 +41,10 @@ model User {
   // Feature flags (embedded, not separate table!)
   manualTracking    Boolean @default(true) // Always enabled
   automaticTracking Boolean @default(false) // Enabled when Gmail scope granted
+
+  // Optional enhancements
+  lastLoginAt DateTime?
+  provider    String    @default("google")
 
   // Relations
   jobs Job[]
