@@ -45,7 +45,7 @@ export const googleAuth = async (req: Request, res: Response) => {
       }
 
       // User already authenticated → no need to go through OAuth again
-      return res.redirect(`${process.env.CLIENT_URL}/dashboard`);
+      return res.redirect(`${process.env.CLIENT_URL}`);
     } catch {
       // Invalid/expired token OR user missing
       // continue with fresh Google OAuth login
@@ -135,7 +135,7 @@ export const googleCallback = async (req: Request, res: Response) => {
 
     // OAuth flow complete
     // Redirect user back to frontend app
-    res.redirect(`${process.env.CLIENT_URL}/dashboard`);
+    res.redirect(`${process.env.CLIENT_URL}`);
   } catch (err) {
     console.log("googleCallback ERROR");
     console.error(err);
@@ -203,7 +203,7 @@ export const googleUpgradeCallback = async (req: Request, res: Response) => {
     if (!hasGmailScope) {
       // User denied the scope
       return res.redirect(
-        `http://localhost:4173${state.redirectTo}?error=gmail_access_denied`,
+        `${process.env.CLIENT_URL}${state.redirectTo}?error=gmail_access_denied`,
       );
     }
     const response = await fetch(
@@ -241,12 +241,11 @@ export const googleUpgradeCallback = async (req: Request, res: Response) => {
     // await scanGmailForApplications(req.session.userId);
 
     res.redirect(
-      `http://localhost:4173${state.redirectTo}?success=automatic_enabled`,
+      `${process.env.CLIENT_URL}${state.redirectTo}?success=automatic_enabled`,
     );
   } catch (err) {
     console.log("googleUpgradeCallback ERROR");
     console.error(err);
-    res.redirect("http://localhost:4173/dashboard?error=upgrade_failed");
     res.redirect(`${process.env.CLIENT_URL}/dashboard?error=upgrade_failed`);
   }
 };

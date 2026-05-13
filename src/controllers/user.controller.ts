@@ -5,7 +5,7 @@ import { AuthRequest } from "../types/request.js";
 export const getMe = async (req: AuthRequest, res: Response) => {
   const user = await getSafeUserById(req.user.userId);
   //NOTE:Don't send all data
-  res.json({ user });
+  res.json(user);
 };
 
 export const updateTimezone = async (req: AuthRequest, res: Response) => {
