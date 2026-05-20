@@ -16,5 +16,6 @@ export default defineConfig({
     url: env(
       process.env.NODE_ENV === "production" ? "DATABASE_URL" : "DIRECT_URL",
     ),
+    // url: env("DIRECT_URL"),
   },
 });

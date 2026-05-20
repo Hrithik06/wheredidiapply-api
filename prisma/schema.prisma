@@ -66,10 +66,11 @@ model Job {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Job details
-  company     String
-  title       String
-  status      JobStatus @default(APPLIED)
-  appliedDate DateTime?
+  company    String
+  title      String
+  status     JobStatus @default(APPLIED)
+  appliedAt  DateTime  @db.Date // ← just the date, no time, no timezone
+  receivedAt DateTime? // ← Gmail timestamp, is a point in time, store UTC
 
   // Tracking source
   source JobSource @default(MANUAL)
