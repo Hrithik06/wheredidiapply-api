@@ -26,6 +26,6 @@ export const filterJobSchema = z.object({
   company: z.string().min(1).optional(),
   status: z.enum(JobStatus).optional(),
   source: z.enum(JobSource).optional(),
-  q: z.string().min(1).optional(), // 🔥 search
+  q: z.string().min(1).optional(), //search
 });
 export type FilterJobQuery = z.infer<typeof filterJobSchema>;
