@@ -169,7 +169,7 @@ export function decodeEmail(msg: MessageWithBody | null): DecodedEmail | null {
 // company
 // role
 // status
-// appliedDate
+// appliedAt
 // emailSubject
 // emailThreadId
 

@@ -20,7 +20,7 @@ export const addJob = async (req: AuthRequest, res: Response) => {
   const job = {
     ...input, // validated by Zod
     status: input.status ?? JobStatus.APPLIED, // apply defaults for missing fields
-    appliedDate: new Date(input.appliedDate) ?? new Date(), // apply defaults for missing fields
+    appliedAt: new Date(input.appliedAt), // apply defaults for missing fields
     userId, // injected by server
   };
   const jobDB = await createJob(job);
@@ -72,6 +72,7 @@ export const seedJobsForUser = async (req: AuthRequest, res: Response) => {
       userId,
       company: "Google",
       title: "Frontend Engineer",
+      appliedAt: "2026-05-20",
       status: JobStatus.APPLIED,
       source: JobSource.MANUAL,
       notes: "Applied via careers page",
@@ -80,6 +81,7 @@ export const seedJobsForUser = async (req: AuthRequest, res: Response) => {
       userId,
       company: "Microsoft",
       title: "Software Engineer",
+      appliedAt: "2026-05-20",
       status: JobStatus.REJECTED,
       source: JobSource.MANUAL,
       notes: "Rejected after OA",
@@ -88,6 +90,7 @@ export const seedJobsForUser = async (req: AuthRequest, res: Response) => {
       userId,
       company: "Amazon",
       title: "SDE I",
+      appliedAt: "2026-05-20",
       status: JobStatus.INTERVIEW_SCHEDULED,
       source: JobSource.GMAIL_AUTO,
       emailMessageId: `msg-${userId}-demo`,

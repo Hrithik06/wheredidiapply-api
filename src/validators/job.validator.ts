@@ -7,7 +7,7 @@ export const createJobSchema = z.object({
   status: z.enum(JobStatus).optional(),
   notes: z.string().optional(),
   url: z.url().optional(),
-  appliedDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), //Mandatory when data is coming from client not auto gmail
+  appliedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), //Mandatory when data is coming from client not auto gmail
 });
 
 export const updateJobSchema = z.object({
@@ -16,7 +16,7 @@ export const updateJobSchema = z.object({
   status: z.enum(JobStatus).optional(),
   notes: z.string().optional(),
   url: z.url().optional(),
-  appliedDate: z
+  appliedAt: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/)
     .optional(),

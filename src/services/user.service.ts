@@ -84,8 +84,6 @@ export async function getSafeUserById(userId: string) {
     select: {
       id: true,
       email: true,
-      timezone: true,
-      timezoneInitialized: true,
       name: true,
       givenName: true,
     },

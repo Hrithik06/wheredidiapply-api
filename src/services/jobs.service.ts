@@ -48,7 +48,6 @@ export async function createJob(data: CreateJobServiceInput) {
 
 export async function updateJob(jobId: string, data: UpdateJobInput) {
   const updatedJob = await prisma.job.update({ where: { id: jobId }, data });
-  console.log(updatedJob);
   return updatedJob;
 }
 

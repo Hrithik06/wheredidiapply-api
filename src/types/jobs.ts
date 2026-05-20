@@ -18,6 +18,7 @@ export type JobWhereInput = Prisma.JobWhereInput;
 export type CreateJobInput = {
   company: string;
   title: string;
+  appliedAt: string;
   status?: JobStatus;
   notes?: string;
   url?: string;
@@ -31,7 +32,7 @@ export type UpdateJobInput = {
   status?: JobStatus;
   notes?: string;
   url?: string;
-  appliedDate?: string;
+  appliedAt?: string;
 };
 
 // ===== SERVICE TYPES service layer=====
